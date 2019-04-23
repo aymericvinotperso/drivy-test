@@ -16,16 +16,16 @@ class Rental
     price_for_time + price_for_distance
   end
 
+  def rental_duration
+    (1 + (@end_date - @start_date).to_i)
+  end
+
   private
 
   # These constants define long rental discount rules
   AFTER_ONE_DAY_PRICE = 0.9
   AFTER_FOUR_DAY_PRICE = 0.7
   AFTER_TEN_DAY_PRICE = 0.5
-
-  def rental_duration
-    (1 + (@end_date - @start_date).to_i)
-  end
 
   def price_for_time
     daily_price = @car.price_per_day

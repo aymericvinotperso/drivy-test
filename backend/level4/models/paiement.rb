@@ -17,15 +17,19 @@ class Paiement
   ASSITANCE_DAILY_CUT = 100
 
   def total_fee
-    @price * TOTAL_CUT_RATE
+    (@price * TOTAL_CUT_RATE).to_i
   end
 
   def insurance_fee
-    total_fee * INSURANCE_CUT_RATE
+    (total_fee * INSURANCE_CUT_RATE).to_i
   end
 
   def assistance_fee
-    @rental_duration * ASSITANCE_DAILY_CUT
+    (@rental_duration * ASSITANCE_DAILY_CUT).to_i
+  end
+
+  def drivy_fee
+    ([total_fee - insurance_fee - assistance_fee, 0].max).to_i
   end
 
   def driver_paiement
@@ -40,7 +44,7 @@ class Paiement
     {
       who: "owner",
       type: "credit",
-      amount: @price * (1 - TOTAL_CUT_RATE)
+      amount: (@price * (1 - TOTAL_CUT_RATE)).to_i
     }
   end
 
@@ -64,7 +68,7 @@ class Paiement
     {
       who: "drivy",
       type: "credit",
-      amount: total_fee - insurance_fee - assistance_fee
+      amount: drivy_fee
     }
   end
 end

@@ -7,9 +7,9 @@ class Rental
   def initialize(car, attributes = {}, options)
     @id = attributes['id']
     @car = car
-    @start_date = DateTime.parse(attributes['start_date']).to_date
-    @end_date = DateTime.parse(attributes['end_date']).to_date
-    @distance = attributes['distance']
+    @start_date = DateTime.parse(attributes.fetch('start_date')).to_date
+    @end_date = DateTime.parse(attributes.fetch('end_date')).to_date
+    @distance = attributes.fetch('distance')
     @options = options
   end
 

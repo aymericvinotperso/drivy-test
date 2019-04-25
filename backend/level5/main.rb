@@ -4,11 +4,10 @@ require_relative 'models/paiement'
 require 'json'
 
 def generate_json_output(json_input)
-  cars = []
-  rentals = []
 
   # We create car and rental instances from the input json
-  json_input['cars'].each { |car| cars << Car.new(car) }
+  cars = json_input['cars'].each.map { |car| Car.new(car) }
+  rentals = []
 
   json_input['rentals'].each do |rental|
     rented_car = cars.select { |car| car.id == rental['car_id'] }.first

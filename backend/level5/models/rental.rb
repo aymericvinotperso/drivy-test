@@ -4,7 +4,7 @@ require 'date'
 class Rental
   attr_reader :id, :options
 
-  def initialize(car, attributes = {}, options)
+  def initialize(car, attributes = {}, options = [])
     @id = attributes['id']
     @car = car
     @start_date = DateTime.parse(attributes.fetch('start_date')).to_date
@@ -28,14 +28,14 @@ class Rental
 
   def price_for_equipment_options
     price = 0
-    price += GPS_PRICE * duration if @options['gps']
-    price += BABY_SEAT_PRICE * duration if @options['baby_seat']
+    price += GPS_PRICE * duration if @options.include?('gps')
+    price += BABY_SEAT_PRICE * duration if @options.include?('baby_seat')
 
     price
   end
 
   def price_for_insurance_options
-    @options['additional_insurance'] ? ADDITIONAL_INSURANCE_PRICE * duration : 0
+    @options.include?('additional_insurance') ? ADDITIONAL_INSURANCE_PRICE * duration : 0
   end
 
   def total_price

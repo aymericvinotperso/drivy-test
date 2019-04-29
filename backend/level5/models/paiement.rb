@@ -15,24 +15,24 @@ class Paiement
   INSURANCE_CUT_RATE = 0.5
   ASSITANCE_DAILY_CUT = 100
 
-  def total_fee
-    (@rental.price_excluding_options * TOTAL_CUT_RATE).to_i
+  def total_cut
+    (@rental.price_excluding_options * TOTAL_CUT_RATE).round
   end
 
   def insurance_fee
-    (total_fee * INSURANCE_CUT_RATE).to_i
+    (total_cut * INSURANCE_CUT_RATE).round
   end
 
   def assistance_fee
-    (@rental.duration * ASSITANCE_DAILY_CUT).to_i
+    (@rental.duration * ASSITANCE_DAILY_CUT).round
   end
 
   def drivy_fee
-    (total_fee - insurance_fee - assistance_fee + @rental.price_for_insurance_options).to_i
+    total_cut - insurance_fee - assistance_fee + @rental.price_for_insurance_options
   end
 
   def owner_fee
-    (@rental.price_excluding_options * (1 - TOTAL_CUT_RATE) + @rental.price_for_equipment_options).to_i
+    @rental.price_excluding_options - total_cut + @rental.price_for_equipment_options
   end
 
   def driver_paiement

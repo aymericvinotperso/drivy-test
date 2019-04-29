@@ -59,7 +59,7 @@ class Rental
       price += daily_price * AFTER_TEN_DAY_PRICE if day > 10
     end
 
-    price.to_i
+    price.round
   end
 
   def price_for_distance

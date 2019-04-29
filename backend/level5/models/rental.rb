@@ -5,7 +5,7 @@ class Rental
   attr_reader :id, :options
 
   def initialize(car, attributes = {}, options = [])
-    @id = attributes['id']
+    @id = attributes.fetch('id')
     @car = car
     @start_date = DateTime.parse(attributes.fetch('start_date')).to_date
     @end_date = DateTime.parse(attributes.fetch('end_date')).to_date

@@ -3,25 +3,24 @@ require_relative 'models/rental'
 require_relative 'models/paiement'
 require 'json'
 
+def generate_rental_instances(json_input)
+    cars = json_input['cars'].map { |car| Car.new(car) }
+
+    json_input['rentals'].map do |rental|
+      rented_car = cars.select { |car| car.id == rental['car_id'] }.first
+
+      rental_options = json_input['options'].select { |option| rental['id'] == option['rental_id'] }
+                                            .map { |option| option['type'] }
+
+      Rental.new(rented_car, rental, rental_options)
+    end
+end
+
 def generate_json_output(json_input)
+  rentals = generate_rental_instances(json_input)
 
-  # We create car and rental instances from the input json
-  cars = json_input['cars'].each.map { |car| Car.new(car) }
-  rentals = []
-
-  json_input['rentals'].each do |rental|
-    rented_car = cars.select { |car| car.id == rental['car_id'] }.first
-
-    options_hash = {}
-    rental_options = json_input['options'].select { |option| rental['id'] == option['rental_id'] }
-    rental_options.each { |option| options_hash[option['type']] = true }
-
-    rentals << Rental.new(rented_car, rental, options_hash)
-  end
-
-  # Then generate the json output
   rentals.map! do |rental|
-    { id: rental.id, options: rental.options.keys, actions: Paiement.new(rental).actions }
+    { id: rental.id, options: rental.options, actions: Paiement.new(rental).actions }
   end
 
   JSON.pretty_generate(rentals: rentals)
